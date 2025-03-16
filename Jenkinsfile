@@ -41,10 +41,9 @@ pipeline {
         stage('Deploy to EKS') {
             steps {
                 sh 'aws eks update-kubeconfig --region us-west-2 --name dummy-cluster'
-                sh 'kubectl apply -f $WORKSPACE/graph-adapter-deployment.yaml'
-                sh 'kubectl apply -f $WORKSPACE/graph-adapter-service.yaml'
+                sh 'helm upgrade --install graph-adapter $WORKSPACE/graph-adapter'
             }
         }
-        
+
     }
 }
