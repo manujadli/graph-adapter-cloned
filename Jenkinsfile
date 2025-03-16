@@ -5,8 +5,10 @@ pipeline {
         DOCKER_CREDENTIALS_ID = 'dockerhub'
         GITHUB_CREDENTIALS_ID = 'github'
         DOCKER_HUB_REPO = 'jasonwick/graph-adapter'
-        IMAGE_TAG = 'RELEASE0'
+        IMAGE_TAG = 'RELEASE1'
         GITHUB_REPO = 'https://github.com/manujadli/graph-adapter.git'
+        ECR_REPO_URL = '885168626435.dkr.ecr.us-west-2.amazonaws.com/graph-adapter'
+        AWS_REGION = 'us-west-2'
     }
 
     stages {
@@ -30,10 +32,19 @@ pipeline {
             }
         }
 
-        stage('Push to Docker Hub') {
+        stage('Authenticate to ECR') {
             steps {
-                withDockerRegistry([credentialsId: 'dockerhub', url: '']) {
-                    sh "docker push $DOCKER_HUB_REPO:$IMAGE_TAG"
+                withCredentials([aws(credentialsId: 'aws-credentials', region: "$AWS_REGION")]) {
+                    sh "aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REPO_URL"
+                }
+            }
+        }
+
+        stage('Tag & Push Image to ECR') {
+            steps {
+                script {
+                    sh "docker tag graph-adapter:$IMAGE_TAG $ECR_REPO_URL:$IMAGE_TAG"
+                    sh "docker push $ECR_REPO_URL:$IMAGE_TAG"
                 }
             }
         }
