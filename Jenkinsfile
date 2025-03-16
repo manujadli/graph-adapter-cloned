@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_CREDENTIALS_ID = 'dockerhub'
         GITHUB_CREDENTIALS_ID = 'github'
-        IMAGE_NAME = 'jasonwick/graph-adapter'
+        DOCKER_HUB_REPO = 'jasonwick/graph-adapter'
         IMAGE_TAG = 'RELEASE0'
         GITHUB_REPO = 'https://github.com/manujadli/graph-adapter.git'
     }
