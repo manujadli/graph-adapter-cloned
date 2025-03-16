@@ -34,7 +34,8 @@ pipeline {
 
         stage('Authenticate to ECR') {
             steps {
-                withCredentials([aws(credentialsId: 'aws-credentials', region: "$AWS_REGION")]) {
+                script {
+                    // Use IAM role for authentication (no need for aws-credentials)
                     sh "aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REPO_URL"
                 }
             }
@@ -43,7 +44,7 @@ pipeline {
         stage('Tag & Push Image to ECR') {
             steps {
                 script {
-                    sh "docker tag graph-adapter:$IMAGE_TAG $ECR_REPO_URL:$IMAGE_TAG"
+                    sh "docker tag $DOCKER_HUB_REPO:$IMAGE_TAG $ECR_REPO_URL:$IMAGE_TAG"
                     sh "docker push $ECR_REPO_URL:$IMAGE_TAG"
                 }
             }
@@ -51,10 +52,11 @@ pipeline {
 
         stage('Deploy to EKS') {
             steps {
-                sh 'aws eks update-kubeconfig --region us-west-2 --name dummy-cluster'
-                sh 'helm upgrade --install graph-adapter $WORKSPACE/graph-adapter'
+                script {
+                    sh "aws eks update-kubeconfig --region $AWS_REGION --name dummy-cluster"
+                    sh "helm upgrade --install graph-adapter $WORKSPACE/graph-adapter"
+                }
             }
         }
-
     }
 }
