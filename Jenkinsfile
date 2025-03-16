@@ -40,8 +40,8 @@ pipeline {
 
         stage('Deploy to EKS') {
             steps {
-                sh 'kubectl apply -f /home/ec2-user/builds/graph-adapter-deployment.yaml'
-                sh 'kubectl apply -f /home/ec2-user/builds/graph-adapter-service.yaml'
+                sh 'kubectl apply -f $WORKSPACE/graph-adapter-deployment.yaml'
+                sh 'kubectl apply -f $WORKSPACE/graph-adapter-service.yaml'
             }
         }
         
