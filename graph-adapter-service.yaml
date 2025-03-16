@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: graph-adapter-service
+spec:
+  selector:
+    app: graph-adapter
+  ports:
+    - protocol: TCP
+      port: 80         # Service Port
+      targetPort: 80   # Container Port
+      nodePort: 30080  # NodePort (Range: 30000-32767)
+  type: NodePort
