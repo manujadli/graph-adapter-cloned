@@ -4,7 +4,8 @@ pipeline {
     environment {
         DOCKER_CREDENTIALS_ID = 'dockerhub'
         GITHUB_CREDENTIALS_ID = 'github'
-        IMAGE_NAME = 'your-dockerhub-username/spring-boot-app'
+        IMAGE_NAME = 'jasonwick/graph-adapter'
+        IMAGE_TAG = 'RELEASE0'
         GITHUB_REPO = 'https://github.com/manujadli/graph-adapter.git'
     }
 
@@ -18,6 +19,22 @@ pipeline {
         stage('Build JAR') {
             steps {
                 sh 'mvn clean package -DskipTests'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh "docker build -t $DOCKER_HUB_REPO:$IMAGE_TAG ."
+                }
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
+                withDockerRegistry([credentialsId: 'docker-hub-credentials', url: '']) {
+                    sh "docker push $DOCKER_HUB_REPO:$IMAGE_TAG"
+                }
             }
         }
         
