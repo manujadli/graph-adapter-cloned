@@ -5,7 +5,7 @@ pipeline {
         DOCKER_CREDENTIALS_ID = 'dockerhub'
         GITHUB_CREDENTIALS_ID = 'github'
         IMAGE_NAME = 'your-dockerhub-username/spring-boot-app'
-        GITHUB_REPO = 'https://github.com/your-username/spring-boot-app.git'
+        GITHUB_REPO = 'https://github.com/manujadli/graph-adapter.git'
     }
 
     stages {
