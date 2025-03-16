@@ -9,6 +9,6 @@ spec:
   ports:
     - protocol: TCP
       port: 80         # Service Port
-      targetPort: 80   # Container Port
+      targetPort: 8080   # Container Port
       nodePort: 30080  # NodePort (Range: 30000-32767)
   type: NodePort
