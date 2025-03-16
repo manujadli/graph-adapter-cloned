@@ -37,6 +37,13 @@ pipeline {
                 }
             }
         }
+
+        stage('Deploy to EKS') {
+            steps {
+                sh 'kubectl apply -f /home/ec2-user/builds/graph-adapter-deployment.yaml'
+                sh 'kubectl apply -f /home/ec2-user/builds/graph-adapter-service.yaml'
+            }
+        }
         
     }
 }
