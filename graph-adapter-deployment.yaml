@@ -1,0 +1,21 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: graph-adapter
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: graph-adapter
+  template:
+    metadata:
+      labels:
+        app: graph-adapter
+    spec:
+      containers:
+      - name: graph-adapter
+        image: jasonwick/graph-adapter:RELEASE0
+        ports:
+        - containerPort: 80
